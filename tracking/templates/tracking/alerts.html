@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📢 Liste des alertes - FleetTrack</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- STYLES INTÉGRÉS -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* =============== NAVBAR =============== */
+    .navbar {
+      background: linear-gradient(135deg, #6a5acd, #5a4abf);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+    }
+
+    .navbar-logo a {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-menu {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .navbar-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+    }
+
+    .navbar-link:hover {
+      opacity: 0.85;
+    }
+
+    .navbar-mobile {
+      display: none;
+    }
+
+    /* =============== CONTENU PRINCIPAL =============== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1a202c;
+      margin-bottom: 2rem;
+      font-size: 1.8rem;
+    }
+
+    /* =============== LISTE DES ALERTES =============== */
+    .alert-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .alert-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-left: 5px solid #e53e3e;
+      transition: transform 0.2s, box-shadow 0.2s;
+      opacity: 1;
+    }
+
+    .alert-card.unread {
+      border-left-color: #6a5acd;
+      background: #f8f5ff;
+    }
+
+    .alert-card.deleted {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      border: none;
+      overflow: hidden;
+      transition: opacity 0.3s ease-out, height 0.3s ease-out;
+    }
+
+    .alert-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .alert-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #1a202c;
+    }
+
+    .alert-type {
+      background: #e53e3e;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .alert-description {
+      color: #4a5568;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .alert-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #718096;
+      margin-top: 0.75rem;
+    }
+
+    .alert-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-read {
+      background: #6a5acd;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-read:hover {
+      background: #5a4abf;
+    }
+
+    .btn-delete {
+      background: #e53e3e;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-delete:hover {
+      background: #c53030;
+    }
+
+    /* =============== AUCUNE ALERTE =============== */
+    .no-alerts {
+      text-align: center;
+      padding: 3rem 1rem;
+      font-size: 1.1rem;
+      color: #718096;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* =============== FOOTER =============== */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #718096;
+      font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 3rem;
+    }
+
+    /* =============== MOBILE =============== */
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+
+      .navbar-mobile {
+        display: flex;
+        justify-content: space-around;
+        padding: 0.5rem 0;
+        background: #5a4abf;
+        font-size: 0.8rem;
+      }
+
+      .mobile-link {
+        color: white;
+        text-decoration: none;
+        text-align: center;
+      }
+
+      .mobile-icon {
+        display: block;
+        font-size: 1.5rem;
+      }
+
+      .alert-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .alert-actions {
+        flex-direction: row;
+        gap: 0.5rem;
+      }
+
+      .btn-read, .btn-delete {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-logo">
+        <a href="{% url 'home' %}">FleetTrack</a>
+      </div>
+      <div class="navbar-menu">
+        <a href="{% url 'vehicle_map' %}" class="navbar-link">Carte</a>
+        <a href="{% url 'alert_list' %}" class="navbar-link">Alertes</a>
+        <a href="{% url 'history_list' %}" class="navbar-link">Historique</a>
+        <a href="{% url 'user_list' %}" class="navbar-link">Utilisateurs</a>
+        <a href="{% url 'profile' %}" class="navbar-link">Profil</a>
+        <a href="{% url 'help_contact' %}" class="navbar-link">Aide</a>
+      </div>
+    </div>
+
+    <!-- Menu mobile -->
+    <div class="navbar-mobile">
+      <a href="{% url 'vehicle_map' %}" class="mobile-link">
+        <span class="mobile-icon">🗺️</span>
+        <span>Carte</span>
+      </a>
+      <a href="{% url 'alert_list' %}" class="mobile-link">
+        <span class="mobile-icon">⚠️</span>
+        <span>Alertes</span>
+      </a>
+      <a href="{% url 'history_list' %}" class="mobile-link">
+        <span class="mobile-icon">🕒</span>
+        <span>Historique</span>
+      </a>
+      <a href="{% url 'profile' %}" class="mobile-link">
+        <span class="mobile-icon">👥</span>
+        <span>Profil</span>
+      </a>
+      <a href="{% url 'help_contact' %}" class="mobile-link">
+        <span class="mobile-icon">❓</span>
+        <span>Aide</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenu principal -->
+  <div class="container">
+    <h2>📢 Liste des alertes</h2>
+
+    {% if alerts %}
+      <div class="alert-list">
+        {% for alert in alerts %}
+          <div class="alert-card" id="alert-{{ alert.id }}" {% if not alert.is_read %}class="alert-card unread"{% endif %}>
+            <div class="alert-header">
+              <span>🚗 {{ alert.vehicle }}</span>
+              <span class="alert-type">{{ alert.alert_type|upper }}</span>
+            </div>
+            <p class="alert-description">{{ alert.description }}</p>
+            <div class="alert-footer">
+              <span>📅 {{ alert.timestamp|date:"d/m/Y à H:i" }}</span>
+              <div class="alert-actions">
+                <button class="btn-read" onclick="markAsRead({{ alert.id }})">
+                  {% if alert.is_read %}✔️ Vu{% else %}👁️ Marquer comme vu{% endif %}
+                </button>
+                <button class="btn-delete" onclick="deleteAlert({{ alert.id }})">🗑️ Supprimer</button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="no-alerts">
+        <p>Aucune alerte enregistrée pour le moment.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Pied de page -->
+  <footer class="footer">
+    <p>&copy; {% now "Y" %} FleetTrack - Système de suivi de flotte</p>
+  </footer>
+
+  <!-- Script AJAX -->
+  <script>
+    function markAsRead(alertId) {
+      fetch(`/alerts/${alertId}/read/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(r => r.json())
+      .then(data => {
+        const btn = document.querySelector(`#alert-${alertId} .btn-read`);
+        btn.textContent = '✔️ Vu';
+        document.getElementById(`alert-${alertId}`).classList.remove('unread');
+      })
+      .catch(err => alert('Erreur'));
+    }
+
+    function deleteAlert(alertId) {
+      if (!confirm("Supprimer cette alerte ?")) return;
+
+      fetch(`/alerts/${alertId}/delete/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(r => r.json())
+      .then(data => {
+        const el = document.getElementById(`alert-${alertId}`);
+        el.classList.add('deleted');
+        setTimeout(() => el.remove(), 300);
+      })
+      .catch(err => alert('Erreur'));
+    }
+
+    // Helper pour CSRF
+    function getCookie(name) {
+      let value = "; " + document.cookie;
+      let parts = value.split("; " + name + "=");
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+  </script>
+
+</body>
+</html>

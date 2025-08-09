@@ -1,0 +1,453 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FleetTrack - Profil utilisateur</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- STYLES INTÉGRÉS -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* =============== NAVBAR =============== */
+    .navbar {
+      background: linear-gradient(135deg, #6a5acd, #5a4abf);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+    }
+
+    .navbar-logo a {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-menu {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .navbar-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+    }
+
+    .navbar-link:hover {
+      opacity: 0.85;
+    }
+
+    .navbar-mobile {
+      display: none;
+    }
+
+    /* =============== CONTENU PRINCIPAL =============== */
+    .main-content {
+      padding: 2rem 0;
+    }
+
+    /* =============== PROFIL =============== */
+    .profile-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, #5a4abf, #4a3a9f);
+      color: white;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .avatar-circle {
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    .profile-info h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .user-role {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .profile-content {
+      padding: 2rem;
+    }
+
+    .profile-section {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 2rem;
+    }
+
+    .profile-section:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.4rem;
+      color: #1a202c;
+    }
+
+    .section-icon {
+      font-size: 1.5rem;
+    }
+
+    .section-content {
+      padding-left: 2.5rem;
+    }
+
+    .info-item {
+      display: flex;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .info-label {
+      font-weight: 500;
+      color: #2d3748;
+      min-width: 200px;
+    }
+
+    .info-value {
+      color: #4a5568;
+    }
+
+    /* =============== FORMULAIRES =============== */
+    .profile-form {
+      max-width: 500px;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #6a5acd;
+    }
+
+    .form-actions {
+      margin-top: 1.5rem;
+      text-align: right;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: #6a5acd;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5a4abf;
+    }
+
+    .btn-warning {
+      background: #ecc94b;
+      color: #2d3748;
+    }
+
+    .btn-warning:hover {
+      background: #d69e2e;
+    }
+
+    .btn-danger {
+      background: #e53e3e;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c53030;
+    }
+
+    /* =============== FOOTER =============== */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #718096;
+      font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 3rem;
+    }
+
+    /* =============== MOBILE =============== */
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+
+      .navbar-mobile {
+        display: flex;
+        justify-content: space-around;
+        padding: 0.5rem 0;
+        background: #5a4abf;
+        font-size: 0.8rem;
+      }
+
+      .mobile-link {
+        color: white;
+        text-decoration: none;
+        text-align: center;
+      }
+
+      .mobile-icon {
+        display: block;
+        font-size: 1.5rem;
+      }
+
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .section-content {
+        padding-left: 0;
+      }
+
+      .info-label {
+        min-width: auto;
+        display: inline-block;
+        width: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-logo">
+          <a href="{% url 'home' %}">FleetTrack</a>
+        </div>
+        <div class="navbar-menu">
+          <a href="{% url 'vehicle_map' %}" class="navbar-link">Carte</a>
+          <a href="{% url 'alert_list' %}" class="navbar-link">Alertes</a>
+          <a href="{% url 'history_list' %}" class="navbar-link">Historique</a>
+          <a href="{% url 'user_list' %}" class="navbar-link">Utilisateurs</a>
+          <a href="{% url 'help_contact' %}" class="navbar-link">Aide</a>
+        </div>
+      </div>
+
+      <!-- Menu mobile -->
+      <div class="navbar-mobile">
+        <a href="{% url 'vehicle_map' %}" class="mobile-link">
+          <span class="mobile-icon">🗺️</span>
+          <span>Carte</span>
+        </a>
+        <a href="{% url 'alert_list' %}" class="mobile-link">
+          <span class="mobile-icon">⚠️</span>
+          <span>Alertes</span>
+        </a>
+        <a href="{% url 'history_list' %}" class="mobile-link">
+          <span class="mobile-icon">🕒</span>
+          <span>Historique</span>
+        </a>
+        <a href="{% url 'user_list' %}" class="mobile-link">
+          <span class="mobile-icon">👥</span>
+          <span>Utilisateurs</span>
+        </a>
+        <a href="{% url 'help_contact' %}" class="mobile-link">
+          <span class="mobile-icon">❓</span>
+          <span>Aide</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+      <div class="profile-container">
+        <div class="profile-header">
+          <div class="avatar-circle">
+            {{ user.first_name|default:user.username|slice:":1"|upper }}
+          </div>
+          <div class="profile-info">
+            <h1>{{ user.first_name|default:user.username }}</h1>
+            <p class="user-role">Gestionnaire de flotte</p>
+          </div>
+        </div>
+
+        <div class="profile-content">
+          <!-- Informations personnelles -->
+          <div class="profile-section">
+            <div class="section-header">
+              <h2>Informations personnelles</h2>
+              <div class="section-icon">👤</div>
+            </div>
+            <div class="section-content">
+              <div class="info-item">
+                <span class="info-label">Email actuel :</span>
+                <span class="info-value">{{ user.email }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Nom d'utilisateur :</span>
+                <span class="info-value">{{ user.username }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Dernière connexion :</span>
+                <span class="info-value">{{ user.last_login|date:"d/m/Y à H:i" }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Changer email -->
+          <div class="profile-section">
+            <div class="section-header">
+              <h2>Changer d'email</h2>
+              <div class="section-icon">✉️</div>
+            </div>
+            <div class="section-content">
+              <form method="post" action="{% url 'edit_email' %}" class="profile-form">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="new_email">Nouvel email :</label>
+                  <input type="email" name="new_email" id="new_email" placeholder="Entrez votre nouvel email" required>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Mettre à jour l'email</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Changer mot de passe -->
+          <div class="profile-section">
+            <div class="section-header">
+              <h2>Changer de mot de passe</h2>
+              <div class="section-icon">🔒</div>
+            </div>
+            <div class="section-content">
+              <form method="post" action="{% url 'edit_password' %}" class="profile-form">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="new_password1">Nouveau mot de passe :</label>
+                  <input type="password" name="new_password1" id="new_password1" placeholder="Entrez votre nouveau mot de passe" required>
+                </div>
+                <div class="form-group">
+                  <label for="new_password2">Confirmez le mot de passe :</label>
+                  <input type="password" name="new_password2" id="new_password2" placeholder="Confirmez votre nouveau mot de passe" required>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-warning">Changer le mot de passe</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Déconnexion -->
+          <div class="profile-section logout-section">
+            <div class="section-header">
+              <h2>Déconnexion</h2>
+              <div class="section-icon">🚪</div>
+            </div>
+            <div class="section-content">
+              <form method="post" action="{% url 'logout' %}" class="profile-form">
+                {% csrf_token %}
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-danger">Se déconnecter</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="footer">
+      <p>&copy; {% now "Y" %} FleetTrack - Système de suivi de flotte</p>
+    </footer>
+  </div>
+
+  <!-- Script personnalisé -->
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

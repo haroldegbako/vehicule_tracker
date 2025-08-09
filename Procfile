@@ -1,0 +1,1 @@
+web: gunicorn vehicule_tracker.wsgi

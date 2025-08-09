@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🕒 Historique des positions - FleetTrack</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- STYLES INTÉGRÉS -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* =============== NAVBAR =============== */
+    .navbar {
+      background: linear-gradient(135deg, #6a5acd, #5a4abf);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+    }
+
+    .navbar-logo a {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-menu {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .navbar-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+    }
+
+    .navbar-link:hover {
+      opacity: 0.85;
+    }
+
+    .navbar-mobile {
+      display: none;
+    }
+
+    /* =============== CONTENU PRINCIPAL =============== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1a202c;
+      margin-bottom: 2rem;
+      font-size: 1.8rem;
+      border-bottom: 2px solid #6a5acd;
+      padding-bottom: 10px;
+    }
+
+    /* =============== TRAJETS =============== */
+    .trip {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .trip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .trip h3 {
+      margin: 0;
+      color: #1a202c;
+      font-size: 1.2rem;
+    }
+
+    .trip p {
+      margin: 0.3rem 0;
+      font-size: 0.95rem;
+      color: #4a5568;
+    }
+
+    .distance {
+      font-weight: 600;
+      color: #2b6cb0;
+    }
+
+    /* =============== DÉTAIL DES POSITIONS =============== */
+    h4 {
+      margin: 1rem 0 0.5rem;
+      color: #2d3748;
+      font-size: 1rem;
+    }
+
+    .points-list {
+      max-height: 150px;
+      overflow-y: auto;
+      background: #f7fafc;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #4a5568;
+      margin: 0.5rem 0;
+    }
+
+    .point {
+      margin: 0.3rem 0;
+      display: flex;
+      justify-content: space-between;
+      font-family: monospace;
+    }
+
+    .timestamp {
+      font-weight: 600;
+      color: #1a202c;
+      min-width: 60px;
+    }
+
+    /* =============== BOUTON =============== */
+    .btn {
+      background: #6a5acd;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #5a4abf;
+    }
+
+    /* =============== CARTE =============== */
+    #map {
+      height: 400px;
+      margin-top: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    /* =============== AUCUN HISTORIQUE =============== */
+    .no-history {
+      text-align: center;
+      padding: 3rem 1rem;
+      font-size: 1.1rem;
+      color: #718096;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* =============== FOOTER =============== */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #718096;
+      font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 3rem;
+    }
+
+    /* =============== MOBILE =============== */
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+
+      .navbar-mobile {
+        display: flex;
+        justify-content: space-around;
+        padding: 0.5rem 0;
+        background: #5a4abf;
+        font-size: 0.8rem;
+      }
+
+      .mobile-link {
+        color: white;
+        text-decoration: none;
+        text-align: center;
+      }
+
+      .mobile-icon {
+        display: block;
+        font-size: 1.5rem;
+      }
+
+      .trip-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .point {
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-logo">
+        <a href="{% url 'home' %}">FleetTrack</a>
+      </div>
+      <div class="navbar-menu">
+        <a href="{% url 'vehicle_map' %}" class="navbar-link">Carte</a>
+        <a href="{% url 'alert_list' %}" class="navbar-link">Alertes</a>
+        <a href="{% url 'history_list' %}" class="navbar-link">Historique</a>
+        <a href="{% url 'user_list' %}" class="navbar-link">Utilisateurs</a>
+        <a href="{% url 'profile' %}" class="navbar-link">Profil</a>
+        <a href="{% url 'help_contact' %}" class="navbar-link">Aide</a>
+      </div>
+    </div>
+
+    <!-- Menu mobile -->
+    <div class="navbar-mobile">
+      <a href="{% url 'vehicle_map' %}" class="mobile-link">
+        <span class="mobile-icon">🗺️</span>
+        <span>Carte</span>
+      </a>
+      <a href="{% url 'alert_list' %}" class="mobile-link">
+        <span class="mobile-icon">⚠️</span>
+        <span>Alertes</span>
+      </a>
+      <a href="{% url 'history_list' %}" class="mobile-link">
+        <span class="mobile-icon">🕒</span>
+        <span>Historique</span>
+      </a>
+      <a href="{% url 'profile' %}" class="mobile-link">
+        <span class="mobile-icon">👥</span>
+        <span>Profil</span>
+      </a>
+      <a href="{% url 'help_contact' %}" class="mobile-link">
+        <span class="mobile-icon">❓</span>
+        <span>Aide</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenu principal -->
+  <div class="container">
+    <h1>🕒 Historique des positions GPS</h1>
+
+    {% if histories %}
+      {% for history in histories %}
+        <div class="trip">
+          <div class="trip-header">
+            <h3>Véhicule : {{ history.vehicle }}</h3>
+            <p><strong>Date :</strong> {{ history.date|date:"d/m/Y H:i:s" }}</p>
+          </div>
+          <p><strong>Points enregistrés :</strong> {{ history.path|length }}</p>
+          <p class="distance"><strong>Distance totale :</strong> {{ history.distance_km|floatformat:2 }} km</p>
+
+          <h4>Détail des positions :</h4>
+          <div class="points-list">
+            {% for point in history.path %}
+              <div class="point">
+                <span class="timestamp">{{ point.timestamp|date:"H:i:s" }}</span>
+                <span>{{ point.lat|floatformat:6 }}, {{ point.lng|floatformat:6 }}
+                  {% if point.speed %} ({{ point.speed|floatformat:1 }} km/h){% endif %}
+                </span>
+              </div>
+            {% endfor %}
+          </div>
+
+          <button class="btn show-route" data-path='{{ history.path|safe }}'>
+            Afficher le trajet sur la carte
+          </button>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="no-history">
+        <p>Aucun historique disponible.</p>
+      </div>
+    {% endif %}
+
+    <!-- Carte pour afficher le trajet -->
+    <div id="map"></div>
+  </div>
+
+  <!-- Pied de page -->
+  <footer class="footer">
+    <p>&copy; {% now "Y" %} FleetTrack - Système de suivi de flotte</p>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // Initialisation de la carte
+    const map = L.map('map').setView([0, 0], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Boutons "Afficher le trajet"
+    document.querySelectorAll('.show-route').forEach(button => {
+      button.addEventListener('click', function () {
+        const pathData = JSON.parse(this.getAttribute('data-path'));
+        if (!pathData || pathData.length === 0) return;
+
+        // Afficher la carte
+        document.getElementById('map').style.display = 'block';
+
+        // Vider la carte
+        map.eachLayer(layer => {
+          if (!layer.options.tileLayer) map.removeLayer(layer);
+        });
+
+        // Ajouter les points
+        const latlngs = pathData.map(p => [p.lat, p.lng]);
+        const polyline = L.polyline(latlngs, { color: 'blue', weight: 5 }).addTo(map);
+        map.fitBounds(polyline.getBounds());
+
+        // Marqueurs de départ et arrivée
+        if (latlngs.length > 0) {
+          L.marker(latlngs[0]).addTo(map).bindPopup('Départ');
+          L.marker(latlngs[latlngs.length - 1]).addTo(map).bindPopup('Arrivée');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

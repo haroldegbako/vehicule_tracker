@@ -1,0 +1,314 @@
+/* static/css/base.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #f4f6f9;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* =============== NAVBAR =============== */
+  .navbar {
+    background: linear-gradient(135deg, #6a5acd, #5a4abf);
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+  }
+  
+  .navbar-logo a {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  
+  .navbar-menu {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .navbar-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: opacity 0.2s;
+  }
+  
+  .navbar-link:hover {
+    opacity: 0.85;
+  }
+  
+  .navbar-mobile {
+    display: none;
+  }
+  
+  /* =============== MAIN =============== */
+  .main-content {
+    padding: 2rem 0;
+  }
+  
+  /* =============== WELCOME HEADER =============== */
+  .welcome-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .welcome-header h1 {
+    font-size: 2.5rem;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+  }
+  
+  .welcome-header p {
+    font-size: 1.1rem;
+    color: #4a5568;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* =============== QUICK ACCESS =============== */
+  .quick-access {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .quick-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: #333;
+  }
+  
+  .quick-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+  
+  .quick-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .quick-card h3 {
+    font-size: 1.2rem;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+  }
+  
+  .quick-card p {
+    color: #4a5568;
+    font-size: 0.95rem;
+  }
+  
+  /* =============== STATS SECTION =============== */
+  .stats-section {
+    margin-bottom: 3rem;
+  }
+  
+  .stats-section h2 {
+    text-align: center;
+    color: #1a202c;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  
+  .stat-card h3 {
+    color: #2d3748;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2b6cb0;
+    margin: 0.5rem 0;
+  }
+  
+  .stat-trend {
+    font-size: 0.9rem;
+  }
+  
+  .trend-positive {
+    color: #38a169;
+  }
+  
+  .trend-negative {
+    color: #e53e3e;
+  }
+  
+  .trend-label {
+    color: #718096;
+  }
+  
+  /* =============== VEHICLES SECTION =============== */
+  .vehicles-section h2 {
+    text-align: center;
+    color: #1a202c;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+  }
+  
+  .vehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .vehicle-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  
+  .vehicle-info {
+    padding: 1.2rem;
+  }
+  
+  .vehicle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .vehicle-header h3 {
+    font-size: 1.1rem;
+    color: #1a202c;
+  }
+  
+  .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .status-active {
+    background: #48bb78;
+  }
+  
+  .status-inactive {
+    background: #e53e3e;
+  }
+  
+  .status-idle {
+    background: #ecc94b;
+  }
+  
+  .vehicle-type,
+  .vehicle-location,
+  .vehicle-update {
+    font-size: 0.9rem;
+    color: #4a5568;
+    margin: 0.3rem 0;
+  }
+  
+  .vehicle-footer {
+    background: #f7fafc;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #718096;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .vehicle-id {
+    font-weight: 500;
+  }
+  
+  .vehicle-link {
+    color: #6a5acd;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  
+  .vehicle-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* =============== FOOTER =============== */
+  .footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: #718096;
+    font-size: 0.9rem;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 3rem;
+  }
+  
+  /* =============== MOBILE =============== */
+  @media (max-width: 768px) {
+    .navbar-menu {
+      display: none;
+    }
+  
+    .navbar-mobile {
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+      background: #5a4abf;
+      font-size: 0.8rem;
+    }
+  
+    .mobile-link {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+    }
+  
+    .mobile-icon {
+      display: block;
+      font-size: 1.5rem;
+    }
+  
+    .welcome-header h1 {
+      font-size: 2rem;
+    }
+  }
